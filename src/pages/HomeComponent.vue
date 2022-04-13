@@ -7,50 +7,34 @@
               <input type="text" placeholder="Tìm kiếm" class="w-2/3 h-10 text-center mb-6 border border-yellow-500 rounded mx-auto block" v-model="contentSearch">
             </div>
           </form>
+          <button class="px-5 text-center bg-yellow-400 py-2 rounded-lg" @class="goToPageFavorite()">goToPageFavorite</button>
             <h1 class="w-72 text-4xl mx-auto uppercase font-bold from-current mb-8">Trang tin tức</h1>
             <!-- Box-1 -->
-            <div v-if="dataNews.length>0">
+            <div class="h-auto" v-if="dataNews.length>0">
               <div class="sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 space-y-4 sm:space-y-0">
-                <div v-for="( dataNewsItem,dataNewsIndex ) in dataNews" :key="dataNewsIndex" class="bg-white">
-                  <div>
-                    <div class="shadow-lg hover:shadow-xl transform transition duration-500 hover:scale-105">
+                <div v-for="( dataNewsItem,dataNewsIndex ) in dataNews" :key="dataNewsIndex" class="bg-white h-auto">
+                  <div class="h-auto">
+                    <div class="shadow-lg h-auto hover:shadow-xl transform transition duration-500 hover:scale-105">
                       <div>
                         <img class="w-full" :src="dataNewsItem.urlToImage"/>
-                        <div class="px-4 py-2">
+                        <div class="px-4 h-auto py-5">
                           <h1 class="text-xl font-gray-700 font-bold">{{dataNewsItem.author}}</h1>
                           <div class="flex space-x-2 mt-2 w-full">
-                            <a :href="dataNewsItem.url" class="text-lg text-gray-600 font-semibold mb-2 w-full text-center">{{dataNewsItem.title}}</a>
+                            <a :href="dataNewsItem.url" class="text-lg text-blue-500 font-semibold mb-2 w-full text-center">{{dataNewsItem.title}}</a>
                           </div>
                           <p class="text-sm tracking-normal ">{{dataNewsItem.content}}</p>
                           <p class="text-sm tracking-normal">{{dataNewsItem.description}}</p>
-                          <button class="mt-12 w-full text-center bg-yellow-400 py-2 rounded-lg">Read more</button>
+                          <div class=" flex justify-between">
+                            <a class="mt-20 w-full px-5 text-center bg-yellow-400 py-2 rounded-lg" :href="'https://www.facebook.com/sharer/sharer.php?u='+dataNewsItem.url"><i class="fa-solid fa-share"></i> FB</a>
+                            <a class="mt-20 w-full px-5 text-center bg-yellow-400 py-2 rounded-lg" :href="'https://twitter.com/intent/tweet?text='+dataNewsItem.url"><i class="fa-solid fa-share"></i> Twitter</a>
+                            <button @click="addToFavorite(dataNewsItem.author)"><i class="fa-solid fa-heart "></i></button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-<!--              <div class="mt-12">-->
-<!--                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">-->
-<!--                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">-->
-<!--                    <span class="">Previous</span>-->
-<!--                    <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />-->
-<!--                  </a>-->
-<!--                  &lt;!&ndash; Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" &ndash;&gt;-->
-<!--                  <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 1 </a>-->
-<!--                  <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 2 </a>-->
-<!--                  <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 3 </a>-->
-<!--                  <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"> ... </span>-->
-<!--                  <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium"> 8 </a>-->
-<!--                  <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 9 </a>-->
-<!--                  <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 10 </a>-->
-<!--                  <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">-->
-<!--                    <span class="">Next</span>-->
-<!--                    <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />-->
-<!--                  </a>-->
-<!--                </nav>-->
-<!--              </div>-->
             </div>
         </div>
 
@@ -71,6 +55,8 @@ export default {
       contentSearch:'',
       errContentSearch:'',
       pageId:1,
+      urlShare:'https://www.facebook.com/sharer/sharer.php?u=',
+      favorite:[],
     }
   },
   methods: {
@@ -101,6 +87,16 @@ export default {
         this.dataNews = [...this.dataNews,...this.dataNews2];
         isLoad = false;
       }
+    },
+    addToFavorite(value){
+      // this.dataNews.forEach(dataAuthor=>{
+      //   if(dataAuthor.author === value){
+      //     localStorage.setItem('favorite',JSON.stringify(dataAuthor));
+      //   }
+      // })
+    },
+    goToPageFavorite(){
+      this.$router.push({name:'favorite'});
     }
   },
   mounted() {

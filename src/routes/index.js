@@ -9,6 +9,11 @@ export const router = new VueRouter({
             name: 'home',
             component:()=> import('@/pages/HomeComponent')
         },
+        {
+            path: '/',
+            name: 'favorite',
+            component:()=> import('@/pages/FavoriteComponent')
+        },
     ],
     mode:"history"
 })
